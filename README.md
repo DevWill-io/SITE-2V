@@ -99,14 +99,14 @@ SITE-2V-REACT/
 ## 🚀 Como Rodar Localmente
 
 ### Pré-requisitos
-- **Node.js** 20.x ou 24.x
+- **Node.js** 24.x
 - **npm** ou **yarn**
 - Conta no **Firebase** (com Realtime Database)
 - Credenciais de aplicação **SUAP**
 
 ### 1. Clonar
 ```bash
-git clone https://github.com/infoWeb2026-2V/SITE-2V-REACT.git
+git clone https://github.com/infoWeb2026-2V/SITE-2V.git
 cd SITE-2V-REACT
 ```
 
