@@ -5,10 +5,14 @@
 //        sem tipagem de resposta, sem tratamento de erro padronizado.
 //
 // Agora: módulo único, tipado, com:
-//   - Injeção de token via getter (vem do AuthContext)
+//   - Leitura de token do cookie/localStorage
 //   - Timeout configurável
 //   - Erro customizado (APIError)
 //   - Suporte a AbortController (útil em useEffect)
+//
+// ⚠️ O getter padrão já lê direto do cookie/localStorage.
+//    NÃO sobrescrever com setTokenGetter(() => obterToken()) — isso
+//    cria recursão infinita: obterToken() → tokenGetter() → obterToken() ...
 // ==========================================
 
 import { cookieGet, STORAGE_KEYS } from '../utils/storage';
@@ -38,23 +42,15 @@ export interface OpcoesChamada {
 // ==========================================
 // OBTENÇÃO DO TOKEN
 // ==========================================
-/**
- * Busca o token SUAP do cookie ou do localStorage.
- * Mesma lógica do código antigo — mas agora num só lugar.
- *
- * ⚠️ Quando o AuthContext estiver pronto, ele vai setar um getter customizado
- *    pra gente não depender de cookie. Ver `setTokenGetter()` abaixo.
- */
+// Getter padrão: lê do cookie ou localStorage.
+// NUNCA sobrescreva isso com uma função que chama obterToken() — isso
+// cria recursão infinita.
 let tokenGetter: () => string | null = () => {
   const m = cookieGet(STORAGE_KEYS.SUAP_TOKEN);
   if (m) return m;
   return localStorage.getItem(STORAGE_KEYS.SUAP_TOKEN);
 };
 
-/**
- * Permite que o AuthContext sobrescreva como o token é lido.
- * Útil quando migrarmos o token pra memória (mais seguro que cookie).
- */
 export function setTokenGetter(getter: () => string | null): void {
   tokenGetter = getter;
 }
@@ -76,7 +72,6 @@ async function fetchComTimeout(
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
-  // Se já veio um signal externo, respeita
   const signal = init.signal
     ? AbortSignal.any
       ? AbortSignal.any([init.signal, controller.signal])
@@ -94,14 +89,6 @@ async function fetchComTimeout(
 // ==========================================
 // CHAMAR API
 // ==========================================
-/**
- * Chama um endpoint /api/* com o token SUAP.
- *
- * Uso:
- *   const dados = await chamarAPI<RespostaXPAdd>('/api/xp?tipo=add', { quantidade: 10 });
- *
- * Lança APIError em caso de erro HTTP ou de negócio (`dados.erro`).
- */
 export async function chamarAPI<T = unknown>(
   endpoint: string,
   corpo: Record<string, unknown> = {},
@@ -141,7 +128,6 @@ export async function chamarAPI<T = unknown>(
   try {
     dados = await res.json();
   } catch {
-    // 204 No Content ou resposta não-JSON
     if (!res.ok) {
       throw new APIError(`HTTP ${res.status}`, res.status, endpoint);
     }
@@ -153,7 +139,6 @@ export async function chamarAPI<T = unknown>(
     throw new APIError(msg, res.status, endpoint, dados);
   }
 
-  // Se a resposta tem `sucesso: false`, ainda é um erro de negócio
   if (dados.sucesso === false) {
     const msg = (dados.erro as string) || 'Operação não concluída';
     throw new APIError(msg, res.status, endpoint, dados);
@@ -165,11 +150,6 @@ export async function chamarAPI<T = unknown>(
 // ==========================================
 // ATALHOS ESPECÍFICOS
 // ==========================================
-// Mantém a API limpa nos componentes: `apiXP.add(10)` em vez de
-// `chamarAPI('/api/xp?tipo=add', { quantidade: 10 })`.
-//
-// Se você adicionar endpoint novo, adiciona aqui o atalho.
-
 import type {
   RespostaXPAdd,
   RespostaContador,
