@@ -1,0 +1,513 @@
+/* ==========================================
+   🐾 MASCOTE — CSS
+   ========================================== */
+
+.mascote-section {
+  padding: 80px 0;
+  background: var(--bg-base);
+}
+
+.mascote-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 5%;
+}
+
+.mascote-title {
+  text-align: center;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin-bottom: 40px;
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-main);
+}
+.mascote-title span {
+  color: var(--accent);
+}
+
+.mascote-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .mascote-wrapper {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+.mascote-imagem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+}
+
+.mascote-flutuante {
+  max-width: 260px;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 30px rgba(139, 94, 221, 0.4));
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  animation: float 5s ease-in-out infinite;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.mascote-flutuante.clicando {
+  transform: scale(0.92);
+  animation: none;
+}
+
+.mascote-clique {
+  margin-top: 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+.btn-mascote-mute {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+.btn-mascote-mute:hover {
+  background: var(--accent-strong);
+  color: #fff;
+  transform: scale(1.05);
+}
+
+.medalha-conquista,
+.coroa-mascote {
+  position: absolute;
+  font-size: 2.4rem;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+.medalha-conquista {
+  bottom: 30%;
+  left: 20%;
+  animation: pulse 2s infinite;
+}
+.coroa-mascote {
+  top: 5%;
+  right: 25%;
+  animation: pulse 2s infinite 0.3s;
+}
+
+.mascote-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: var(--text-main);
+  font-family: 'Poppins', sans-serif;
+}
+.mascote-info > p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.mascote-stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.mascote-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 40px;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+.mascote-stat i {
+  color: var(--accent);
+  font-size: 1rem;
+}
+.mascote-stat span {
+  font-weight: 600;
+}
+
+.mascote-skin-progresso {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+}
+.mascote-skin-progresso.completo {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.08));
+  border-color: rgba(255, 215, 0, 0.4);
+}
+
+.skin-progresso-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.skin-progresso-label i {
+  color: var(--accent);
+}
+.skin-progresso-label strong {
+  color: var(--accent);
+}
+.skin-progresso-label > span:last-child {
+  margin-left: auto;
+  font-weight: 700;
+}
+
+.skin-progresso-bar {
+  height: 6px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.skin-progresso-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+.progresso-container {
+  margin-bottom: 20px;
+}
+.progresso-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.progresso-label span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.progresso-label i {
+  color: var(--accent);
+}
+.progresso-bar {
+  height: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.progresso-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+.btn-mascote {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: var(--accent-strong);
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  margin-top: 10px;
+}
+.btn-mascote:hover:not(:disabled) {
+  background: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 94, 221, 0.4);
+}
+.btn-mascote:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+.btn-mascote:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-mascote.btn-bloqueado-anon {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.mascote-aviso-login {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+.mascote-aviso-login i {
+  color: var(--warning);
+}
+.mascote-aviso-login a {
+  color: var(--accent);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* ---------- Marcos ---------- */
+.marcos-container {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.marco {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  opacity: 0.45;
+  transition: all 0.3s ease;
+}
+.marco.ativo {
+  opacity: 1;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.1));
+  border-color: rgba(255, 215, 0, 0.5);
+  color: var(--text-main);
+  font-weight: 700;
+}
+.marco span:first-child {
+  font-size: 1rem;
+}
+
+/* ---------- Ranking ---------- */
+.mascote-ranking {
+  margin-top: 60px;
+  padding: 30px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+.mascote-ranking.colapsado .ranking-lista,
+.mascote-ranking.colapsado .ranking-meu {
+  display: none;
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.ranking-header h3 {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+.ranking-header i {
+  color: #ffd700;
+}
+.btn-acao-ranking {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-acao-ranking:hover {
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.15);
+  border-color: var(--accent);
+}
+
+.ranking-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.ranking-item {
+  display: grid;
+  grid-template-columns: 40px 44px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--bg-base);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.ranking-item:hover {
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.1);
+  transform: translateX(4px);
+}
+.ranking-item.eu {
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.2);
+  border: 1px solid var(--accent);
+}
+
+.ranking-posicao {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--accent);
+  text-align: center;
+}
+.ranking-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-strong);
+}
+.ranking-info {
+  min-width: 0;
+}
+.ranking-nome {
+  display: block;
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ranking-medalha {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+.ranking-carinhos {
+  font-weight: 700;
+  color: var(--danger);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ranking-vazio,
+.ranking-carregando {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 30px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.ranking-meu {
+  margin-top: 20px;
+  padding: 14px 20px;
+  background: var(--bg-base);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+.ranking-meu i {
+  color: var(--accent);
+}
+.ranking-meu strong {
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+.ranking-meus-carinhos {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+/* ---------- Animações globais ---------- */
+.coracao-animado {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  animation: subirCoracao 1.2s ease-out forwards;
+}
+@keyframes subirCoracao {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-120px) scale(1.6);
+  }
+}
+
+.confete {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: cairConfete 3s ease-out forwards;
+}
+@keyframes cairConfete {
+  0% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(100vh) rotate(720deg);
+  }
+}
+
+@media (max-width: 600px) {
+  .mascote-ranking {
+    padding: 20px 16px;
+  }
+  .ranking-item {
+    grid-template-columns: 32px 36px 1fr auto;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  .ranking-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  .ranking-carinhos {
+    font-size: 0.8rem;
+  }
+}

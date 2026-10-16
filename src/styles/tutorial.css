@@ -1,0 +1,380 @@
+/* ==========================================
+   📚 TUTORIAL — CSS
+   ==========================================
+   Usa as variáveis CSS do tema (--accent, --accent-strong,
+   --bg-surface, --text-main, --text-muted, --border-color)
+   pra funcionar em qualquer cor/modo.
+   ========================================== */
+
+/* ---------- CTA de login (o antigo "empty-state") ---------- */
+.tutorial-cta-section {
+  padding: 80px 0;
+}
+
+.tutorial-cta {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 60px 40px;
+  text-align: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px var(--shadow);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.tutorial-cta:hover {
+  border-color: var(--accent);
+  transform: translateY(-4px);
+}
+
+.tutorial-cta-glow {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.25) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.tutorial-cta-icone {
+  font-size: 3.5rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: block;
+  filter: drop-shadow(
+    0 0 20px hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.5)
+  );
+  animation: float 4s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.tutorial-cta h3 {
+  font-size: clamp(1.3rem, 3vw, 1.6rem);
+  margin-bottom: 12px;
+  color: var(--text-main);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.tutorial-cta p {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-size: 1rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+
+.btn-suap-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+.btn-suap-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.55);
+}
+
+.btn-suap-cta:active {
+  transform: translateY(-1px);
+}
+
+body.light-theme .btn-suap-cta {
+  color: #fff;
+}
+
+/* ---------- FAQ com animação ---------- */
+.faq-lista {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.faq-item:hover {
+  border-color: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.5);
+}
+
+.faq-item.aberto {
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px var(--shadow);
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.05);
+}
+
+.faq-pergunta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.25s ease, background 0.25s ease;
+}
+
+.faq-pergunta:hover {
+  background: hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.08);
+}
+
+.faq-item.aberto .faq-pergunta {
+  color: var(--accent);
+}
+
+.faq-icone {
+  color: var(--accent);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.aberto .faq-icone {
+  transform: scale(1.15);
+}
+
+.faq-texto {
+  flex: 1;
+}
+
+.faq-seta {
+  color: var(--text-muted);
+  transition:
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.25s ease;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.faq-item.aberto .faq-seta {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+/* Animação de altura via grid-template-rows (funciona com
+   qualquer altura de conteúdo, sem chutar valores fixos) */
+.faq-resposta-wrapper {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item.aberto .faq-resposta-wrapper {
+  grid-template-rows: 1fr;
+}
+
+.faq-resposta-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faq-resposta {
+  padding: 0 22px 20px 56px;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.35s ease 0.05s,
+    transform 0.35s ease 0.05s;
+}
+
+.faq-item.aberto .faq-resposta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Atalhos úteis ---------- */
+.tutorial-atalho {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 30px;
+  background-color: var(--bg-base);
+  border: 1px solid var(--bg-card);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px var(--shadow);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    box-shadow 0.3s ease;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  text-decoration: none;
+  width: 100%;
+  overflow: hidden;
+}
+
+.tutorial-atalho::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.08),
+    transparent
+  );
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.tutorial-atalho:hover::before {
+  left: 100%;
+}
+
+.tutorial-atalho:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  background-color: var(--bg-surface);
+  box-shadow: 0 16px 40px var(--shadow);
+}
+
+.tutorial-atalho:active {
+  transform: translateY(-4px) scale(0.99);
+}
+
+.tutorial-atalho i {
+  font-size: 2.6rem;
+  color: var(--accent);
+  margin-bottom: 18px;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tutorial-atalho:hover i {
+  transform: scale(1.15) rotate(-4deg);
+}
+
+.tutorial-atalho h3 {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+}
+
+.tutorial-atalho p {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.tutorial-atalho-seta {
+  margin-top: 16px;
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 700;
+  opacity: 0.7;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tutorial-atalho:hover .tutorial-atalho-seta {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+/* ---------- Passos (numerados) ---------- */
+.passo-numero {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(calc(-50% + 34px));
+  background: var(--accent-strong);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px hsl(var(--tema-h), var(--tema-s), var(--tema-l) / 0.5);
+  border: 2px solid var(--bg-base);
+  z-index: 2;
+}
+
+.passo-icone-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 25px;
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 600px) {
+  .tutorial-cta {
+    padding: 40px 24px;
+  }
+  .tutorial-cta-icone {
+    font-size: 2.8rem;
+  }
+  .btn-suap-cta {
+    padding: 14px 28px;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+  .faq-pergunta {
+    padding: 16px 18px;
+    font-size: 0.92rem;
+  }
+  .faq-resposta {
+    padding: 0 18px 18px 48px;
+    font-size: 0.88rem;
+  }
+  .tutorial-atalho {
+    padding: 30px 20px;
+  }
+  .tutorial-atalho i {
+    font-size: 2.2rem;
+  }
+}
