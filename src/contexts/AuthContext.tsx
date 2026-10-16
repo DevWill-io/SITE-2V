@@ -22,6 +22,9 @@
 //   - Detecta token SUAP expirado (via suap.isAuthenticated())
 //   - Escuta evento global 'suap:401' e desloga automaticamente
 //   - Trata erro 401 no boot limpando sessão
+//   - ⚠️ REMOVIDO setTokenGetter(() => obterToken()) que causava
+//     recursão infinita: obterToken() → tokenGetter() → obterToken() → ...
+//     O getter padrão do services/api.ts já lê direto do cookie/localStorage.
 // ==========================================
 
 import {
@@ -34,7 +37,6 @@ import {
 } from 'react';
 import { suap } from '../services/suap';
 import { apiPerfil } from '../services/api';
-import { setTokenGetter, obterToken } from '../services/api';
 import { ehAdmin } from '../utils/constants';
 import {
   STORAGE_KEYS,
@@ -52,25 +54,12 @@ import { useToast } from '../hooks/useToast';
 export type StatusAuth = 'carregando' | 'logado' | 'deslogado';
 
 interface AuthContextValue {
-  /** Estado atual. */
   status: StatusAuth;
-
-  /** Dados do usuário logado. null se deslogado. */
   user: UsuarioLogado | null;
-
-  /** Matrícula do usuário (atalho). */
   matricula: string | null;
-
-  /** Se é admin (verifica contra MATRICULAS_ADMIN do .env). */
   isAdmin: boolean;
-
-  /** Abre a URL de login do SUAP. */
   entrar: () => void;
-
-  /** Faz logout e limpa tudo. */
   sair: () => void;
-
-  /** URL pronta pra redirecionar pro SUAP. */
   urlLogin: string;
 }
 
@@ -96,12 +85,6 @@ export function AuthProvider({ children }: Props) {
   // ==========================================
   // BOOT — Roda UMA VEZ quando o app monta
   // ==========================================
-  // Essa é a parte que resolve o bug de "às vezes não loga":
-  //   - Não importa se o cookie existe, se o localStorage tem valor,
-  //     se o Firebase respondeu. TUDO é validado AQUI, uma vez,
-  //     com estado de loading explícito.
-  //   - Nenhum componente renderiza tela logada até status != 'carregando'.
-  // ==========================================
   useEffect(() => {
     let cancelado = false;
 
@@ -110,7 +93,6 @@ export function AuthProvider({ children }: Props) {
       suap.init();
 
       // 2. Não está logado? Define deslogado e sai.
-      //    🆕 isAuthenticated() agora verifica expiração do token.
       if (!suap.isAuthenticated()) {
         if (!cancelado) {
           setStatus('deslogado');
@@ -119,9 +101,8 @@ export function AuthProvider({ children }: Props) {
         return;
       }
 
-      // 3. Tem token. Configura o tokenGetter do services/api
-      //    pra que chamarAPI use esse token automaticamente.
-      setTokenGetter(() => obterToken());
+      // 3. Tem token. O getter padrão do services/api já lê do cookie.
+      //    Não precisa sobrescrever nada aqui.
 
       // 4. Busca dados do usuário no SUAP
       try {
@@ -171,7 +152,6 @@ export function AuthProvider({ children }: Props) {
         console.error('[auth] erro no boot:', err);
         if (cancelado) return;
 
-        // 🆕 Se for 401, o token tá expirado — limpa pra forçar re-login
         const msg = err instanceof Error ? err.message : '';
         if (msg.includes('401')) {
           console.warn('[auth] token expirado — limpando');
@@ -185,9 +165,7 @@ export function AuthProvider({ children }: Props) {
 
     boot();
 
-    // 🆕 Listener: se qualquer fetch pro SUAP voltar 401, desloga
-    // automaticamente. Funciona em qualquer ponto do app (boletim,
-    // agenda, mural, etc) sem precisar de tratamento individual.
+    // Listener: se qualquer fetch pro SUAP voltar 401, desloga
     const interceptar401 = () => {
       console.warn('[auth] 401 detectado — deslogando automaticamente');
       suap.logout();
@@ -211,7 +189,6 @@ export function AuthProvider({ children }: Props) {
 
   const sair = useCallback(() => {
     suap.logout();
-    // Limpa TODAS as fontes possíveis
     lsRemove(STORAGE_KEYS.SUAP_TOKEN);
     lsRemove(STORAGE_KEYS.MATRICULA_SUAP);
     try {
@@ -232,7 +209,6 @@ export function AuthProvider({ children }: Props) {
     setStatus('deslogado');
 
     toast('Sessão encerrada.', 'info');
-    // Redireciona pro login depois de um tick
     setTimeout(() => {
       window.location.href = '/login';
     }, 300);
@@ -264,10 +240,6 @@ export function AuthProvider({ children }: Props) {
 // HELPERS INTERNOS
 // ==========================================
 
-/**
- * Monta a URL da foto do SUAP.
- * Se não vier foto, gera avatar via ui-avatars.com.
- */
 function montarUrlFoto(dados: DadosSuap, nomeFallback: string): string {
   const fotoPath =
     dados.url_foto_150x200 || dados.url_foto_75x100 || dados.foto || '';
@@ -286,10 +258,6 @@ function montarUrlFoto(dados: DadosSuap, nomeFallback: string): string {
   return `${base}${fotoPath.startsWith('/') ? '' : '/'}${fotoPath}`;
 }
 
-/**
- * Envia os dados básicos do usuário pro backend salvar no Firebase.
- * O backend decide se sobrescreve ou preserva campos editados.
- */
 async function sincronizarPerfil(
   matricula: string,
   nomeCompleto: string,
@@ -304,7 +272,6 @@ async function sincronizarPerfil(
       foto: usuario.foto,
     });
   } catch (err) {
-    // Erro na API não impede o login — apenas loga
     console.warn('[auth] falha ao salvar perfil:', err);
   }
 }
