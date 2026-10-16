@@ -3,7 +3,6 @@
 // ==========================================
 // Antes: função `chamarAPI` solta em login.js e xp-core.js (duplicada!),
 //        sem tipagem de resposta, sem tratamento de erro padronizado.
-//
 // Agora: módulo único, tipado, com:
 //   - Leitura de token do cookie/localStorage
 //   - Timeout configurável
