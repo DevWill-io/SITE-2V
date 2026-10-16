@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Site oficial da turma 2V — InfoWeb IFRN Caicó",
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   },
   "scripts": {
     "dev": "vite",
